@@ -8,32 +8,16 @@ env:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
     # Matrix config for all supported platforms
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
     
-    - if: matrix.os == 'windows-latest'
-      working-directory: ${{github.workspace}}
+    - name: Download SDL2
       run: |
         curl https://www.libsdl.org/release/SDL2-devel-2.0.14-VC.zip -o ${{github.workspace}}/SDL2.zip
         7z x SDL2.zip && ren SDL2-2.0.14 SDL2
-        echo "test=fucking test" >> $GITHUB_ENV
-        echo "testwo=test2" >> $GITHUB_ENV
-        echo "sdlargs=-DSDL2_LIBRARY=../SDL2/lib -DSDL2_INCLUDE_DIR=../SDL2/include" >> $GITHUB_ENV
-        echo "${{env.sdlargs}}"
-        echo "${{env.test}}"
-        echo "${{env.testtwo}}"
-    - if: matrix.os == 'ubuntu-latest'
-      run: |
-        sudo apt-get update && sudo apt-get install -y libsdl2-dev cmake
-    - if: matrix.os == 'macos-latest'
-      run: |
-        brew install sdl2
 
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
@@ -48,7 +32,7 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE ${{env.sdlargs}} -DDISABLE_GLES=ON -DDISABLE_GLES_1=ON -DDISABLE_GLES_2=ON -DDISABLE_GLES_3=ON -DDISABLE_OPENGL_1=ON -DDISABLE_OPENGL_1_BASE=ON -DDISABLE_OPENGL_2=ON -DBUILD_SHARED=ON -DBUILD_STATIC=ON .
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DSDL2_LIBRARY=../SDL2/lib -DSDL2_INCLUDE_DIR=../SDL2/include -DDISABLE_GLES=ON -DDISABLE_GLES_1=ON -DDISABLE_GLES_2=ON -DDISABLE_GLES_3=ON -DDISABLE_OPENGL_1=ON -DDISABLE_OPENGL_1_BASE=ON -DDISABLE_OPENGL_2=ON -DBUILD_SHARED=ON -DBUILD_STATIC=ON .
 
     - name: Build
       working-directory: ${{github.workspace}}/build
