@@ -52,5 +52,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: SDL_gpu-VS
-        path: ${{github.workspace}}/build/SDL_gpu-VS
+        name: SDL_gpu-${{matrix.os}}
+        path: ${{github.workspace}}/build/SDL_gpu
