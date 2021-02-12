@@ -23,6 +23,7 @@ jobs:
         curl https://www.libsdl.org/release/SDL2-devel-2.0.14-VC.zip -o ${{github.workspace}}/SDL2.zip
         7z x SDL2.zip && ren SDL2-2.0.14 SDL2
         echo "sdlargs=-DSDL2_LIBRARY=../SDL2/lib -DSDL2_INCLUDE_DIR=../SDL2/include" >> $GITHUB_ENV
+        echo "${{env.sdlargs}}"
     - if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update && sudo apt-get install -y libsdl2-dev cmake
