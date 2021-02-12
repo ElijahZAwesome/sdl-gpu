@@ -22,8 +22,7 @@ jobs:
       run: |
         curl https://www.libsdl.org/release/SDL2-devel-2.0.14-VC.zip -o ${{github.workspace}}/SDL2.zip
         7z x SDL2.zip && ren SDL2-2.0.14 SDL2
-        # echo "build/.env" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        echo "SDL2_ARGS=-DSDL2_LIBRARY=../SDL2/lib -DSDL2_INCLUDE_DIR=../SDL2/include" >> $GITHUB_ENV
+        echo "sdlargs=-DSDL2_LIBRARY=../SDL2/lib -DSDL2_INCLUDE_DIR=../SDL2/include" >> $GITHUB_ENV
     - if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update && sudo apt-get install -y libsdl2-dev cmake
@@ -44,7 +43,7 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE ${{env.SDL2_ARGS}} -DDISABLE_GLES=ON -DDISABLE_GLES_1=ON -DDISABLE_GLES_2=ON -DDISABLE_GLES_3=ON -DDISABLE_OPENGL_1=ON -DDISABLE_OPENGL_1_BASE=ON -DDISABLE_OPENGL_2=ON -DBUILD_SHARED=ON -DBUILD_STATIC=ON .
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE ${{env.sdlargs}} -DDISABLE_GLES=ON -DDISABLE_GLES_1=ON -DDISABLE_GLES_2=ON -DDISABLE_GLES_3=ON -DDISABLE_OPENGL_1=ON -DDISABLE_OPENGL_1_BASE=ON -DDISABLE_OPENGL_2=ON -DBUILD_SHARED=ON -DBUILD_STATIC=ON .
 
     - name: Build
       working-directory: ${{github.workspace}}/build
