@@ -8,6 +8,7 @@ env:
 
 jobs:
   build:
+    name: Build
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest]
@@ -37,7 +38,7 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DDISABLE_GLES=ON -DDISABLE_GLES_1=ON -DDISABLE_GLES_2=ON -DDISABLE_GLES_3=ON -DDISABLE_OPENGL_1=ON -DDISABLE_OPENGL_1_BASE=ON -DDISABLE_OPENGL_2=ON -DBUILD_SHARED=ON -DBUILD_STATIC=ON .
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DDISABLE_GLES=ON -DDISABLE_GLES_1=ON -DDISABLE_GLES_2=ON -DDISABLE_GLES_3=ON -DDISABLE_OPENGL_1=ON -DDISABLE_OPENGL_1_BASE=ON -DDISABLE_OPENGL_2=ON -DBUILD_SHARED=ON -DBUILD_STATIC=ON -DBUILD_DEMOS=OFF -DBUILD_TESTS=OFF .
 
     - name: Build
       working-directory: ${{github.workspace}}/build
